@@ -15,42 +15,10 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
     }
 
     /**
-     * Method addIn compares the
-     * elements and adds them either
-     * left or right.
-     * @param newElem element
-     * @param t the Entry element
-     */
-    @Override
-    protected void addIn(E newElem, Entry t) {
-        // dubletter borde kanske inte tillåtas
-        int comp = newElem.compareTo( t.element);
-        if ( comp < 0 ) {
-            if ( t.left == null ) { // här behöver vi titta ner
-                t.left = new Entry( newElem, t);
-                splay(t.left);
-            } else {
-                addIn( newElem, t.left );
-            }
-        } else if ( comp > 0 ) {
-            if ( t.right == null ) {
-                t.right = new Entry( newElem, t);
-                splay(t.right);
-            } else {
-                addIn( newElem, t.right );
-            }
-        } else {
-            size--; // Update do nothing
-            // update => E has to have a update method
-        }
-
-    }
-
-    /**
      * Find the first occurence of an element
      * in the collection that is equal to the argument
-     * @param e element, the element we want to compare
-     * @return if t equals null, return null, otherwise return t.element
+     * @param e element, the element we use to find an entry in the tree
+     * @return Returns the entry that matches the provided element
      */
     @Override
     public E get(E e) {
@@ -66,9 +34,9 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
     /**
      * Method for finding the element
      * and compares it so it can be splayed.
-     * @param e
-     * @param entry element
-     * @return entry if it's found, otherwise null
+     * @param e The element to be found
+     * @param entry An entry, initially root
+     * @return root containing the element after splay if it's found, otherwise null
      */
     @Override
     public Entry find(E e, Entry entry){
@@ -83,7 +51,7 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
 
             splay(entry);
 
-            return entry;
+            return root;
         }
         else if(cmp < 0){
             if(entry.left == null){
@@ -104,8 +72,9 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
     /**
      * Method for enabling the Splaying,
      * move-to-root operation.
-     * @param entry parent element
+     * @param entry The entry to splay
      */
+
     private void splay(Entry entry){
 
         Direction parentDirection;
@@ -140,26 +109,25 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
                     grandParentDirection = Direction.LEFT;
                 }
 
-                //Check which rotation that should be preformed depending on parent relations.
+                //Check which splay function should be preformed depending on parent relations.
                 if(grandParentDirection == Direction.RIGHT){
 
-                    //the relation is: Right -- Right
+
                     if (parentDirection == Direction.RIGHT){
                         zigzig(grandParent);
                     }
-                    //the relation is: Right -- Left
+
                     else {
                         zigzag(grandParent);
                     }
 
                 }else {
 
-                    //the relation is: Left -- Right
                     if(parentDirection == Direction.RIGHT){
                         zagzig(grandParent);
                     }
 
-                    //the relation is: Left -- Left
+
                     else{
                         zagzag(grandParent);
                     }
@@ -168,11 +136,10 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
             }
             //The child is child of root
             else {
-                //the relation is: Right
+
                 if(parentDirection == Direction.RIGHT){
                     zig(parent);
                 }
-                //the relation is: Left
                 else{
                     zag(parent);
                 }
@@ -211,29 +178,26 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
 
         E temp = x.element;
 
-        //CHANGE TOP ELEMENT
         x.element = z.element;
         z.element = temp;
 
-        // z --> A
+
         x.left = z.left;
 
-        //A --> z
+
         if (x.left != null) {
             x.left.parent = x;
         }
 
-        //y --> C
         Entry a = x.right;
         x.right = y;
 
-        //C --> y
         y.left = z.right;
         if (y.left != null) {
             y.left.parent = y;
         }
 
-        //y --> z
+
         Entry b = y.right;
         y.right = z;
 
@@ -273,11 +237,11 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
 
         E temp = x.element;
 
-        //CHANGE TOP ELEMENT
+
         x.element = z.element;
         z.element = temp;
 
-        //TOP ELEMENTS ONLY RIGHT CHILD
+
         x.right = z.right;
 
         if(x.right != null){
@@ -287,7 +251,6 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
         Entry a = x.left;
         x.left = y;
 
-        //Y<--->D
         y.right = z.left;
         if(y.right != null){
             y.right.parent = y;

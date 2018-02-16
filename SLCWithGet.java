@@ -24,9 +24,8 @@ public class SLCWithGet<E extends Comparable<? super E>> extends LinkedCollectio
     }
 
     /**
-     * Method that puts the Entry elements in their
-     * positions in the list. In the while loop we
-     * check the next and previous Entry elements.
+     * Method that puts the Entry elements in their sorted
+     * positions in the list.
      * @param element the object to add into the list
      */
     private boolean insert(E element) {
@@ -72,9 +71,8 @@ public class SLCWithGet<E extends Comparable<? super E>> extends LinkedCollectio
     /**
      *Find the first occurence of an element
      *in the collection that is equal to the argument
-     *@param e element.
-     *@return if t equals null,
-     * return null, otherwise t.element
+     *@param e The element we use as a key
+     *@return entry containing the word we searched for
      */
     @Override
     public E get(E e) {
@@ -85,9 +83,8 @@ public class SLCWithGet<E extends Comparable<? super E>> extends LinkedCollectio
 
     /**
      * Method that compares the elements in the list.
-     * This method will find a word that is located on
-     * several positions.
-     * @param element the object to add into the list
+     * This method will return the entry that matches the searched element
+     * @param element the object we want to find
      * @param head the first element in the list.
      */
     private Entry find(E element, Entry head) {
