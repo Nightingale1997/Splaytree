@@ -10,6 +10,7 @@ public class SLCWithGet<E extends Comparable<? super E>> extends LinkedCollectio
 
     /**
      * Adds elements to our collection.
+     *
      * @param element the object to add into the list
      * @throws NullPointerException if element is null.
      */
@@ -26,6 +27,7 @@ public class SLCWithGet<E extends Comparable<? super E>> extends LinkedCollectio
     /**
      * Method that puts the Entry elements in their sorted
      * positions in the list.
+     *
      * @param element the object to add into the list
      */
     private boolean insert(E element) {
@@ -54,7 +56,7 @@ public class SLCWithGet<E extends Comparable<? super E>> extends LinkedCollectio
                     previousEntry.next = newEntry;
                     return true;
                 }
-            //Om elementet inte var mindre än nästa element flyttas det vidare
+                //Om elementet inte var mindre än nästa element flyttas det vidare
             } else {
                 previousEntry = nextEntry;
                 nextEntry = nextEntry.next;
@@ -69,10 +71,11 @@ public class SLCWithGet<E extends Comparable<? super E>> extends LinkedCollectio
     }
 
     /**
-     *Find the first occurence of an element
-     *in the collection that is equal to the argument
-     *@param e The element we use as a key
-     *@return entry containing the word we searched for
+     * Find the first occurence of an element
+     * in the collection that is equal to the argument
+     *
+     * @param e The element we use as a key
+     * @return entry containing the word we searched for
      */
     @Override
     public E get(E e) {
@@ -84,8 +87,9 @@ public class SLCWithGet<E extends Comparable<? super E>> extends LinkedCollectio
     /**
      * Method that compares the elements in the list.
      * This method will return the entry that matches the searched element
+     *
      * @param element the object we want to find
-     * @param head the first element in the list.
+     * @param head    the first element in the list.
      */
     private Entry find(E element, Entry head) {
 
@@ -95,14 +99,12 @@ public class SLCWithGet<E extends Comparable<? super E>> extends LinkedCollectio
 
             int cmp = current.element.compareTo(element);
 
-            if(cmp < 0){
+            if (cmp < 0) {
                 current = current.next;
-            }
-            else if(cmp == 0){
+            } else if (cmp == 0) {
                 //data found
                 return current;
-            }
-            else if(cmp > 0){
+            } else if (cmp > 0) {
                 break;
             }
         }
