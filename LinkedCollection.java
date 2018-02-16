@@ -25,7 +25,7 @@ public class LinkedCollection<E> extends AbstractCollection<E> {
 	// ========== ========== ========== ==========
 	/**
 	* The class of objects used as nodes of the
-	*  singly linked list
+	* singly linked list
 	*/
 	protected class Entry { 
 

@@ -1,12 +1,26 @@
+/**
+ * The
+ *
+ * @author Thomas Jinton
+ * @author Kevin Solovjov
+ */
+
 public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearchTree<E> implements CollectionWithGet<E> {
 
     /**
-     * Enum for the directions left and right, used to describe parent-child relationship
+     * Directions Left and Right.
      */
-    private enum Dir{
-        RIGHT, LEFT
+    private enum Direction{
+        LEFT, RIGHT
     }
 
+    /**
+     * Method addIn compares the
+     * elements and adds them either
+     * left or right.
+     * @param newElem element
+     * @param t the Entry element
+     */
     @Override
     protected void addIn(E newElem, Entry t) {
         // dubletter borde kanske inte tillåtas
@@ -33,9 +47,10 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
     }
 
     /**
-     * Finds and returns the specified element in the tree
-     * @param e element to compare to
-     * @return the element if found, otherwise null
+     * Find the first occurence of an element
+     * in the collection that is equal to the argument
+     * @param e element, the element we want to compare
+     * @return if t equals null, return null, otherwise return t.element
      */
     @Override
     public E get(E e) {
@@ -49,10 +64,11 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
     }
 
     /**
-     * Finds the specified element in the tree, returns its entry
-     * @param e element to find
-     * @param entry current entry to compare to
-     * @return entry if found, null otherwise
+     * Method for finding the element
+     * and compares it so it can be splayed.
+     * @param e
+     * @param entry element
+     * @return entry if it's found, otherwise null
      */
     @Override
     public Entry find(E e, Entry entry){
@@ -61,15 +77,15 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
             return null;
         }
 
-        int compare = e.compareTo(entry.element);
+        int cmp = e.compareTo(entry.element);
 
-        if(compare == 0){
+        if(cmp == 0){
 
             splay(entry);
 
             return entry;
         }
-        else if(compare < 0){
+        else if(cmp < 0){
             if(entry.left == null){
                 splay(entry);
                 return null;
@@ -86,13 +102,15 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
     }
 
     /**
-     * Performs the splaying
-     * @param entry entry to splay upwards
+     * Method for enabling the Splaying,
+     * move-to-root operation.
+     * @param entry parent element
      */
     private void splay(Entry entry){
 
-        Dir grandParentDir;
-        Dir parentDir;
+        Direction parentDirection;
+        Direction grandParentDirection;
+        Direction child;
 
         //Check if entry has parent
         if(entry.parent != null){
@@ -101,11 +119,11 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
 
             //Check if entry is a right child
             if(parent.right == entry){
-                parentDir = Dir.RIGHT;
+                parentDirection = Direction.RIGHT;
             }
             //else entry is a left child
             else{
-                parentDir = Dir.LEFT;
+                parentDirection = Direction.LEFT;
             }
 
             //Check if entry has a grandparent
@@ -115,18 +133,18 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
 
                 //Check if parent is a right child
                 if(grandParent.right == parent){
-                    grandParentDir = Dir.RIGHT;
+                    grandParentDirection = Direction.RIGHT;
                 }
                 //else parent is a left child
                 else {
-                    grandParentDir = Dir.LEFT;
+                    grandParentDirection = Direction.LEFT;
                 }
 
                 //Check which rotation that should be preformed depending on parent relations.
-                if(grandParentDir == Dir.RIGHT){
+                if(grandParentDirection == Direction.RIGHT){
 
                     //the relation is: Right -- Right
-                    if (parentDir == Dir.RIGHT){
+                    if (parentDirection == Direction.RIGHT){
                         zigzig(grandParent);
                     }
                     //the relation is: Right -- Left
@@ -134,11 +152,10 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
                         zigzag(grandParent);
                     }
 
-
                 }else {
 
                     //the relation is: Left -- Right
-                    if(parentDir == Dir.RIGHT){
+                    if(parentDirection == Direction.RIGHT){
                         zagzig(grandParent);
                     }
 
@@ -152,7 +169,7 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
             //The child is child of root
             else {
                 //the relation is: Right
-                if(parentDir == Dir.RIGHT){
+                if(parentDirection == Direction.RIGHT){
                     zig(parent);
                 }
                 //the relation is: Left
@@ -181,8 +198,10 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
      */
 
     /**
-     * Rotates a left-left child to top
-     * @param x The entry that should be splayed to
+     * The target element is lifted up
+     * by two levels in each case, here
+     * it is Left Left.
+     * @param x entry to be splayed
      */
     public void zagzag(Entry x) {
 
@@ -190,11 +209,11 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
 
         Entry y = x.left;
 
-        E elemX = x.element;
+        E temp = x.element;
 
         //CHANGE TOP ELEMENT
         x.element = z.element;
-        z.element = elemX;
+        z.element = temp;
 
         // z --> A
         x.left = z.left;
@@ -241,8 +260,10 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
      */
 
     /**
-     * Rotates a right-right child to top
-     * @param x The entry that should be splayed to
+     * The target element is lifted up
+     * by two levels in each case, here
+     * it is Right Right.
+     * @param x entry to be splayed
      */
     public void zigzig(Entry x){
 
@@ -250,11 +271,11 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
 
         Entry y = x.right;
 
-        E elemX = x.element;
+        E temp = x.element;
 
         //CHANGE TOP ELEMENT
         x.element = z.element;
-        z.element = elemX;
+        z.element = temp;
 
         //TOP ELEMENTS ONLY RIGHT CHILD
         x.right = z.right;
@@ -286,18 +307,9 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
         }
     }
 
-    // ========== ========== ========== ==========
-
-    /* Rotera 1 steg i hogervarv, dvs
-              x'                 y'
-             / \                / \
-            y'  C   -->        A   x'
-           / \                    / \
-          A   B                  B   C
-    */
-
     /**
-     * @param x The entry that should be splayed to.
+     * Method for rotating one step right using Zag.
+     * @param x entry to be splayed
      */
     private void zag( Entry x ) {
         Entry   y = x.left;
@@ -312,19 +324,11 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
         if ( y.right != null )
             y.right.parent  = y;
         x.right   = y;
-    } //   rotateRight
-    // ========== ========== ========== ==========
-
-    /* Rotera 1 steg i vanstervarv, dvs
-              x'                 y'
-             / \                / \
-            A   y'  -->        x'  C
-               / \            / \
-              B   C          A   B
-    */
+    }
 
     /**
-     * @param x The entry that should be splayed to.
+     * Method for rotating one step left using Zig.
+     * @param x entry to be splayed
      */
     private void zig( Entry x ) {
         Entry  y  = x.right;
@@ -339,21 +343,11 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
         if ( y.left != null )
             y.left.parent   = y;
         x.left    = y;
-    } //   rotateLeft
-    // ========== ========== ========== ==========
-
-    /* Rotera 2 steg i hogervarv, dvs
-              x'                  z'
-             / \                /   \
-            y'  D   -->        y'    x'
-           / \                / \   / \
-          A   z'             A   B C   D
-             / \
-            B   C
-    */
+    }
 
     /**
-     * @param x The entry that should be splayed to.
+     * Method for rotating two steps right using ZagZig.
+     * @param x entry to be splayed
      */
     private void zagzig( Entry x ) {
         Entry   y = x.left,
@@ -370,21 +364,10 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
             z.right.parent = z;
         x.right   = z;
         z.parent  = x;
-    }  //  doubleRotateRight
-    // ========== ========== ========== ==========
-
-    /* Rotera 2 steg i vanstervarv, dvs
-               x'                  z'
-              / \                /   \
-             A   y'   -->       x'    y'
-                / \            / \   / \
-               z   D          A   B C   D
-              / \
-             B   C
-     */
-
+    }
     /**
-     * @param x The entry that should be played to.
+     * Method for rotating two steps left using ZigZag.
+     * @param x entry to be splayed
      */
     private void zigzag( Entry x ) {
         Entry  y  = x.right,
@@ -401,6 +384,5 @@ public class SplayWithGet <E extends Comparable<? super E>> extends BinarySearch
             z.left.parent = z;
         x.left    = z;
         z.parent  = x;
-    } //  doubleRotateLeft
-    // ========== ========== ========== ==========
+    }
 }

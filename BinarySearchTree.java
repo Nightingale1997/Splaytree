@@ -91,7 +91,7 @@ public class BinarySearchTree<E extends Comparable<? super E>>
 	protected Entry root;
 	protected int   size;
 	// ========== ========== ========== ==========
-	protected  class Entry  {
+	protected class Entry  {
 
 		public E      element;
 		public Entry  left, right, parent;
